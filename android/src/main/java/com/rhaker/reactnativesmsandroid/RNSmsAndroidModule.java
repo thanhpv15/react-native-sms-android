@@ -48,13 +48,18 @@ public class RNSmsAndroidModule extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void sms(String phoneNumberString, String body, String sendType, Callback callback) {
+    public void sms(String phoneNumberString, String body, String sendType, int subscriptionId, Callback callback) {
 
         // send directly if user requests and android greater than 4.4
         if ((sendType.equals("sendDirect")) && (body != null) && (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT)) {
 
             try {
-                SmsManager smsManager = SmsManager.getDefault();
+                SmsManager smsManager = null;
+                if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP_MR1) {
+                    smsManager = SmsManager.getSmsManagerForSubscriptionId(subscriptionId);
+                } else {
+                    smsManager = SmsManager.getDefault();
+                }
                 smsManager.sendTextMessage(phoneNumberString,null,body,null,null);
                 callback.invoke(null,"success");
             }
