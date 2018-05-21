@@ -113,6 +113,7 @@ public class RNSmsAndroidModule extends ReactContextBaseJavaModule {
             int maxCount = filterJ.has("maxCount") ? filterJ.optInt("maxCount") : -1;
             Cursor cursor = getCurrentActivity().getContentResolver().query(Uri.parse("content://sms/"+uri_filter), null, "", null, null);
             int c = 0;
+            int count = 0;
             JSONArray jsons = new JSONArray();
             while (cursor.moveToNext()) {
                 boolean matchFilter = false;
@@ -131,7 +132,7 @@ public class RNSmsAndroidModule extends ReactContextBaseJavaModule {
                 {
                     if (c >= indexFrom) {
                         if (maxCount>0 && c >= indexFrom + maxCount) break;
-                        c++;
+                        count++;
                         // Long dateTime = Long.parseLong(cursor.getString(cursor.getColumnIndex("date")));
                         // String message = cursor.getString(cursor.getColumnIndex("body"));
                         JSONObject json;
@@ -139,12 +140,13 @@ public class RNSmsAndroidModule extends ReactContextBaseJavaModule {
                         jsons.put(json);
 
                     }
+                    c++;
                 }
 
             }
             cursor.close();
             try {
-                successCallback.invoke(c, jsons.toString());
+                successCallback.invoke(count, jsons.toString());
             } catch (Exception e) {
                 errorCallback.invoke(e.getMessage());
             }
