@@ -29,6 +29,7 @@ import com.facebook.react.bridge.ReactMethod;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import java.util.ArrayList;
 
 public class RNSmsAndroidModule extends ReactContextBaseJavaModule {
 
@@ -60,7 +61,11 @@ public class RNSmsAndroidModule extends ReactContextBaseJavaModule {
                 } else {
                     smsManager = SmsManager.getDefault();
                 }
-                smsManager.sendTextMessage(phoneNumberString,null,body,null,null);
+                // smsManager.sendTextMessage(phoneNumberString,null,body,null,null);
+                ArrayList<String> parts = smsManager.divideMessage(body);
+
+                smsManager.sendMultipartTextMessage(phoneNumberString, null, parts, null, null);
+
                 callback.invoke(null,"success");
             }
 
