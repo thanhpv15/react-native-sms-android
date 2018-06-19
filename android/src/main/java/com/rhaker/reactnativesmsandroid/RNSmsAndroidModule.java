@@ -116,7 +116,7 @@ public class RNSmsAndroidModule extends ReactContextBaseJavaModule {
             String fcontent = filterJ.optString("body");
             int indexFrom = filterJ.has("indexFrom") ? filterJ.optInt("indexFrom") : 0;
             int maxCount = filterJ.has("maxCount") ? filterJ.optInt("maxCount") : -1;
-            Cursor cursor = getCurrentActivity().getContentResolver().query(Uri.parse("content://sms/"+uri_filter), null, "", null, null);
+            Cursor cursor = this.reactContext.getApplicationContext().getContentResolver().query(Uri.parse("content://sms/"+uri_filter), null, "", null, null);
             int c = 0;
             int count = 0;
             JSONArray jsons = new JSONArray();
